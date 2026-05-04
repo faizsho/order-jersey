@@ -46,9 +46,53 @@ Jika Anda ingin menjalankan atau mengembangkan project ini di komputer lokal (lo
 
 ### 1. Clone Repository
 ```bash
-git clone [https://github.com/USERNAME_GITHUB/order-jersey.git](https://github.com/USERNAME_GITHUB/order-jersey.git)
+git clone [https://github.com/faizsho/order-jersey.git](https://github.com/faizsho/order-jersey.git)
 cd order-jersey
 ```
+
+### 2. Install Dependencies (PHP & Node.js)
+```bash
+composer install
+npm install
+npm run build
+```
+
+### 3. Install Dependencies (PHP & Node.js)
+```bash
+cp .env.example .env
+```
+Buka file .env dan sesuaikan nama aplikasi serta koneksi database Anda:
+
+```bash
+APP_NAME="Galipat Apparel"
+APP_URL=http://localhost
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_jersey
+DB_USERNAME=root
+DB_PASSWORD=
+```
+### 4. Generate Key & Migrasi Database
+Jalankan perintah ini untuk membuat kunci keamanan aplikasi dan menyusun kerangka
+```bash
+php artisan key:generate
+php artisan migrate
+```
+### 5. Jalankan Aplikasi
+```bash
+php artisan serve
+```
+
+Aplikasi kini dapat diakses melalui browser pada http://localhost:8000. Halaman utama akan otomatis diarahkan ke halaman Login.
+
+🎨 Kustomisasi Tampilan (UI)
+Logo & Branding: Logo dapat diubah pada file public/logo-apparel.png dan direferensikan pada resources/views/components/application-logo.blade.php.
+
+Tema Navigasi: Menggunakan skema warna elegan (Abu-abu terang pada navigasi dan Hitam pada halaman Login) yang dapat diatur via kelas Tailwind di file layout.
+
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
