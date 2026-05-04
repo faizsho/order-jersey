@@ -88,6 +88,7 @@ php artisan serve
 Aplikasi kini dapat diakses melalui browser pada http://localhost:8000. Halaman utama akan otomatis diarahkan ke halaman Login.
 
 🎨 Kustomisasi Tampilan (UI)
+
 Logo & Branding: Logo dapat diubah pada file public/logo-apparel.png dan direferensikan pada resources/views/components/application-logo.blade.php.
 
 Tema Navigasi: Menggunakan skema warna elegan (Abu-abu terang pada navigasi dan Hitam pada halaman Login) yang dapat diatur via kelas Tailwind di file layout.
