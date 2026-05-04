@@ -1,57 +1,98 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 👕 Galipat Order Management System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Sistem manajemen pemesanan (Order Management System) berbasis Web untuk industri *Apparel* / Konveksi Jersey. Aplikasi ini dirancang untuk menjembatani komunikasi data antara **Customer**, **Admin (Owner)**, dan **Tim Produksi**, guna meminimalisir kesalahan cetak (typo nama/nomor) dan memastikan alur kerja produksi lebih terstruktur.
 
-## About Laravel
+## 🚀 Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Aplikasi ini menggunakan konsep **Role-Based Access Control (RBAC)** dengan 3 level pengguna:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+1. **👑 Super Admin (Owner/Manajer)**
+   - Akses penuh ke seluruh pesanan masuk.
+   - Manajemen User (Tambah, Ubah Role, Reset Password, Hapus Akun).
+   - Kendali Status Pesanan (`DRAFT` ➔ `PROSES` ➔ `SELESAI`).
+   - Fitur Hapus Pesanan (beserta data turunannya).
+   
+2. **👤 User (Customer / Klien)**
+   - Membuat pesanan tim baru.
+   - Input data ukuran, nama punggung, dan nomor punggung secara manual.
+   - **Import Excel:** Mengunggah file Excel berisi puluhan data pemain sekaligus.
+   - Hak akses mengedit/menghapus data hanya berlaku saat pesanan berstatus `DRAFT`.
+   
+3. **🏭 Read-Only (Tim Produksi / Penjahit / Sablon)**
+   - Akses melihat daftar pesanan yang sedang diproses.
+   - Tidak memiliki tombol *Add, Edit, Delete, atau Import* (Mencegah perubahan data tidak sengaja).
+   - **Export Excel:** Mengunduh data pesanan ke dalam format Excel siap cetak.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## ⚙️ Alur Kerja Sistem (Workflow)
 
-## Learning Laravel
+Sistem menggunakan "kunci status" untuk menjaga integritas data selama produksi:
+* 🟡 **DRAFT:** Customer membuat pesanan dan memasukkan data. Data bebas diubah, ditambah, atau dihapus. Tim Produksi belum boleh mengeksekusi.
+* 🔵 **PROSES:** Admin memverifikasi pesanan dan mengubah status menjadi "Proses". Sistem akan **mengunci** akses edit/hapus pada akun Customer. Tim Produksi mulai mencetak baju berdasarkan data final.
+* 🟢 **SELESAI:** Baju telah selesai diproduksi dan dikirim. Status diubah sebagai arsip.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 🛠️ Tech Stack & Requirements
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* **Framework:** Laravel 11/12
+* **Frontend:** Tailwind CSS, Alpine.js, Laravel Blade
+* **Authentication:** Laravel Breeze
+* **Database:** MySQL / MariaDB
+* **Library Tambahan:** [Maatwebsite/Laravel-Excel](https://laravel-excel.com/) (Butuh ekstensi PHP `php-gd`, `php-zip`, dan `php-xml`).
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+---
 
-## Agentic Development
+## 💻 Panduan Instalasi (Local Development)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Jika Anda ingin menjalankan atau mengembangkan project ini di komputer lokal (localhost), ikuti langkah-langkah berikut:
 
+### 1. Clone Repository
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone [https://github.com/faizsho/order-jersey.git](https://github.com/faizsho/order-jersey.git)
+cd order-jersey
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### 2. Install Dependencies (PHP & Node.js)
+```bash
+composer install
+npm install
+npm run build
+```
 
-## Contributing
+### 3. Install Dependencies (PHP & Node.js)
+```bash
+cp .env.example .env
+```
+Buka file .env dan sesuaikan nama aplikasi serta koneksi database Anda:
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+APP_NAME="Galipat Apparel"
+APP_URL=http://localhost
 
-## Code of Conduct
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_jersey
+DB_USERNAME=root
+DB_PASSWORD=
+```
+### 4. Generate Key & Migrasi Database
+Jalankan perintah ini untuk membuat kunci keamanan aplikasi dan menyusun kerangka
+```bash
+php artisan key:generate
+php artisan migrate
+```
+### 5. Jalankan Aplikasi
+```bash
+php artisan serve
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Aplikasi kini dapat diakses melalui browser pada http://localhost:8000. Halaman utama akan otomatis diarahkan ke halaman Login.
 
-## Security Vulnerabilities
+🎨 Kustomisasi Tampilan (UI)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Logo & Branding: Logo dapat diubah pada file public/logo-apparel.png dan direferensikan pada resources/views/components/application-logo.blade.php.
+
+Tema Navigasi: Menggunakan skema warna elegan (Abu-abu terang pada navigasi dan Hitam pada halaman Login) yang dapat diatur via kelas Tailwind di file layout.
+
 
 ## License
 
