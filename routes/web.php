@@ -25,7 +25,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/admin/teams', [AdminTeamController::class, 'index'])->name('admin.teams.index');
         Route::get('/admin/teams/{team}', [AdminTeamController::class, 'show'])->name('admin.teams.show');
         Route::patch('/admin/teams/{team}/status', [AdminTeamController::class, 'updateStatus'])->name('admin.teams.update-status');
-      // Rute Kelola User (TAMBAHAN BARU)
+        Route::patch('/admin/teams/{team}/desain', [\App\Http\Controllers\Admin\TeamController::class, 'updateDesain'])->name('admin.teams.update-desain');
+// Rute Kelola User (TAMBAHAN BARU)
         Route::get('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.users.index');
         Route::post('/admin/users', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.users.store'); // ?? INI TAMBAHANNYA BANG
         Route::patch('/admin/users/{user}/role', [\App\Http\Controllers\Admin\UserController::class, 'updateRole'])->name('admin.users.update-role');

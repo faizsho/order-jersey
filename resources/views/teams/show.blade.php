@@ -12,6 +12,37 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 border-b pb-2">Desain Jersey</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    
+                    <div class="border rounded-lg p-4 bg-gray-50 text-center">
+                        <p class="font-semibold text-gray-700 mb-2">Desain Player</p>
+                        @if($team->desain_player)
+                            <a href="{{ asset('storage/' . $team->desain_player) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $team->desain_player) }}" alt="Desain Player" class="max-h-64 mx-auto rounded shadow-sm hover:opacity-80 transition cursor-pointer">
+                            </a>
+                            <p class="text-xs text-gray-500 mt-2">Klik gambar untuk memperbesar</p>
+                        @else
+                            <p class="text-sm text-gray-500 italic py-10 border-2 border-dashed rounded">Belum ada desain player yang diupload.</p>
+                        @endif
+                    </div>
+
+                    <div class="border rounded-lg p-4 bg-gray-50 text-center">
+                        <p class="font-semibold text-gray-700 mb-2">Desain Kiper</p>
+                        @if($team->desain_kiper)
+                            <a href="{{ asset('storage/' . $team->desain_kiper) }}" target="_blank">
+                                <img src="{{ asset('storage/' . $team->desain_kiper) }}" alt="Desain Kiper" class="max-h-64 mx-auto rounded shadow-sm hover:opacity-80 transition cursor-pointer">
+                            </a>
+                            <p class="text-xs text-gray-500 mt-2">Klik gambar untuk memperbesar</p>
+                        @else
+                            <p class="text-sm text-gray-500 italic py-10 border-2 border-dashed rounded">Belum ada desain kiper yang diupload.</p>
+                        @endif
+                    </div>
+
+                </div>
+            </div>
+          
 
             <!-- TAMPILKAN PESAN ERROR JIKA ADA -->
             @if($errors->any())

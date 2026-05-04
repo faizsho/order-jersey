@@ -9,7 +9,7 @@ class Team extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['user_id', 'nama_team', 'status_order', 'edit_deadline'];
+    protected $fillable = ['user_id', 'nama_team', 'status_order', 'edit_deadline', 'desain_player', 'desain_kiper'];
 
     // Relasi: Tim ini milik siapa?
     public function user()

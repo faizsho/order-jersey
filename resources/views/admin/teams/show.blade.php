@@ -9,7 +9,12 @@
             </span>
         </div>
     </x-slot>
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-500">
+
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+
+            @if(auth()->user()->role === 'super_admin')
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-yellow-500">
                 <h3 class="text-lg font-bold mb-4 border-b pb-2">Status Management</h3>
                 <div class="flex flex-wrap gap-4 items-center">
                     <p class="text-sm text-gray-600">Ubah status pesanan ke:</p>
@@ -42,19 +47,71 @@
                     </form>
                 </div>
             </div>
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
+            @endif
 
-            <!-- TAMPILKAN PESAN ERROR JIKA ADA -->
             @if($errors->any())
                 <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
                     {{ $errors->first() }}
                 </div>
             @endif
 
-            <!-- CEK STATUS: JIKA DRAFT DAN BUKAN READ-ONLY BISA INPUT -->
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <h3 class="text-lg font-bold mb-4 border-b pb-2">Desain Jersey</h3>
+                
+                <form action="{{ route('admin.teams.update-desain', $team->id) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    @method('PATCH')
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div class="border rounded-lg p-4 bg-gray-50 text-center">
+                            <p class="font-semibold text-gray-700 mb-2">Desain Player</p>
+                            @if($team->desain_player)
+                                <a href="{{ asset('storage/' . $team->desain_player) }}" target="_blank">
+                                    <img src="{{ asset('storage/' . $team->desain_player) }}" alt="Desain Player" class="max-h-64 mx-auto rounded shadow-sm hover:opacity-80 transition cursor-pointer mb-3">
+                                </a>
+                            @else
+                                <p class="text-sm text-gray-500 italic py-10">Belum ada desain player yang diupload.</p>
+                            @endif
+
+                            @if(auth()->user()->role === 'super_admin')
+                            <div class="mt-2 text-left bg-white p-2 rounded border">
+                                <label class="block text-xs font-bold text-gray-600 mb-1">Ganti/Upload Desain Player:</label>
+                                <input type="file" name="desain_player" accept="image/*" class="text-sm w-full file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            </div>
+                            @endif
+                        </div>
+
+                        <div class="border rounded-lg p-4 bg-gray-50 text-center">
+                            <p class="font-semibold text-gray-700 mb-2">Desain Kiper</p>
+                            @if($team->desain_kiper)
+                                <a href="{{ asset('storage/' . $team->desain_kiper) }}" target="_blank">
+                                    <img src="{{ asset('storage/' . $team->desain_kiper) }}" alt="Desain Kiper" class="max-h-64 mx-auto rounded shadow-sm hover:opacity-80 transition cursor-pointer mb-3">
+                                </a>
+                            @else
+                                <p class="text-sm text-gray-500 italic py-10">Belum ada desain kiper yang diupload.</p>
+                            @endif
+
+                            @if(auth()->user()->role === 'super_admin')
+                            <div class="mt-2 text-left bg-white p-2 rounded border">
+                                <label class="block text-xs font-bold text-gray-600 mb-1">Ganti/Upload Desain Kiper:</label>
+                                <input type="file" name="desain_kiper" accept="image/*" class="text-sm w-full file:mr-2 file:py-1 file:px-2 file:rounded file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                            </div>
+                            @endif
+                        </div>
+
+                    </div>
+
+                    @if(auth()->user()->role === 'super_admin')
+                    <div class="mt-4 flex justify-end">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-800 text-white text-sm font-bold py-2 px-6 rounded shadow">
+                            Simpan Revisi Desain
+                        </button>
+                    </div>
+                    @endif
+                </form>
+            </div>
             @if($team->status_order === 'draft' && auth()->user()->role !== 'read')
-            <!-- Form Input Baju Baru -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-blue-500">
                 <h3 class="text-lg font-bold mb-4 border-b pb-2">Tambah Daftar Baju</h3>
                 <form action="{{ route('jerseys.store', $team->id) }}" method="POST" class="flex flex-wrap gap-4 items-end">
@@ -99,7 +156,6 @@
                 </form>
             </div>
             @else
-            <!-- NOTIFIKASI JIKA STATUS BUKAN DRAFT ATAU AKUN READ-ONLY -->
             <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded shadow-sm">
                 <div class="flex">
                     <div class="flex-shrink-0">
@@ -113,16 +169,13 @@
             </div>
             @endif
 
-            <!-- Tabel Daftar Baju + Fitur Excel & Sorting -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
                 
-                <!-- HEADER TABEL, SORT & TOMBOL EXCEL -->
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 border-b pb-4 gap-4">
                     <h3 class="text-lg font-bold">Daftar Baju ({{ $team->jerseys->count() }} Pcs)</h3>
                     
                     <div class="flex flex-wrap items-center gap-2">
                         
-                        <!-- FITUR SORTING (BARU) -->
                         <form method="GET" action="{{ url()->current() }}" class="flex items-center gap-2 mr-2">
                             <span class="text-sm text-gray-600 font-bold">Urutkan:</span>
                             <select name="sort" onchange="this.form.submit()" class="text-sm border-gray-300 rounded shadow-sm py-2 px-3 focus:ring-blue-500 focus:border-blue-500 cursor-pointer">
@@ -133,12 +186,10 @@
                             </select>
                         </form>
 
-                        <!-- TOMBOL EXPORT (Semua bisa lihat termasuk Read-Only) -->
                         <a href="{{ route('jerseys.export', $team->id) }}" class="bg-green-600 hover:bg-green-800 text-white text-sm font-bold py-2 px-4 rounded shadow">
                             Download Excel
                         </a>
 
-                        <!-- FORM IMPORT (Disembunyikan jika Read-Only atau pesanan bukan DRAFT) -->
                         @if(auth()->user()->role !== 'read' && (auth()->user()->role === 'super_admin' || $team->status_order === 'draft'))
                         <form action="{{ route('jerseys.import', $team->id) }}" method="POST" enctype="multipart/form-data" class="flex gap-2 items-center">
                             @csrf
@@ -151,7 +202,6 @@
                     </div>
                 </div>
 
-                <!-- LOGIKA SORTING KOLEKSI -->
                 @php
                     $jerseys = $team->jerseys;
                     if (request('sort') === 'nama') {
@@ -163,7 +213,6 @@
                     }
                 @endphp
 
-                <!-- TABEL DATA -->
                 <table class="w-full text-left border-collapse">
                     <thead>
                         <tr class="bg-gray-50 border-b">
@@ -186,8 +235,7 @@
                             <td class="py-2 px-4">{{ $jersey->lengan }}</td>
                             <td class="py-2 px-4">{{ $jersey->kategori }}</td>
                             <td class="py-2 px-4">
-                                <!-- PENGECEKAN ROLE UNTUK TOMBOL HAPUS -->
-                                @if(auth()->user()->role !== 'read')
+                                @if(auth()->user()->role !== 'read' && $team->status_order === 'draft')
                                 <form action="{{ route('jerseys.destroy', ['team' => $team->id, 'jersey' => $jersey->id]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus baju ini?');">
                                     @csrf
                                     @method('DELETE')
