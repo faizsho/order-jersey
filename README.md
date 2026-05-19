@@ -40,6 +40,9 @@ Sistem menggunakan "kunci status" untuk menjaga integritas data selama produksi:
 
 ---
 
+![Dashboard Awawl](img/dashl.png)
+---
+
 ## 💻 Panduan Instalasi (Local Development)
 
 Jika Anda ingin menjalankan atau mengembangkan project ini di komputer lokal (localhost), ikuti langkah-langkah berikut:
